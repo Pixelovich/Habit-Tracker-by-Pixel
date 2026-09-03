@@ -4,9 +4,9 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { getDailyRecord, getLocalDateKey, saveHabitValue } from '@/database/habits';
 import type { DailyRecord, HabitType, HabitValue } from '@/types/habits';
 
-export function useDailyHabits() {
+export function useDailyHabits(selectedDate?: string) {
   const database = useSQLiteContext();
-  const date = getLocalDateKey();
+  const date = selectedDate ?? getLocalDateKey();
   const [record, setRecord] = useState<DailyRecord | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);

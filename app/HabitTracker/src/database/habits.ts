@@ -51,6 +51,12 @@ export async function getDailyRecord(
   );
 }
 
+export async function getDailyRecords(database: SQLiteDatabase): Promise<DailyRecord[]> {
+  return database.getAllAsync<DailyRecord>(
+    'SELECT * FROM daily_records ORDER BY date DESC',
+  );
+}
+
 export async function saveHabitValue(
   database: SQLiteDatabase,
   habitType: HabitType,

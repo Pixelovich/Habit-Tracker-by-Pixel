@@ -15,7 +15,7 @@ export function TodayHeader({
   date,
   userName = 'Luis',
   userInitials = 'LL',
-  editionLabel = 'Luis Lecumberri',
+  editionLabel = 'Desarrollado por: L. Lecumberri',
 }: TodayHeaderProps) {
   const today = new Date(date);
 
