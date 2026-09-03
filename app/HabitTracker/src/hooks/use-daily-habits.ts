@@ -1,0 +1,39 @@
+import { useCallback, useEffect, useState } from 'react';
+import { useSQLiteContext } from 'expo-sqlite';
+
+import { getDailyRecord, getLocalDateKey, saveHabitValue } from '@/database/habits';
+import type { DailyRecord, HabitType, HabitValue } from '@/types/habits';
+
+export function useDailyHabits() {
+  const database = useSQLiteContext();
+  const date = getLocalDateKey();
+  const [record, setRecord] = useState<DailyRecord | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  const refresh = useCallback(async () => {
+    try {
+      setError(null);
+      setRecord(await getDailyRecord(database, date));
+    } catch (loadError) {
+      setError(loadError instanceof Error ? loadError : new Error('No se pudieron cargar los datos'));
+    } finally {
+      setLoading(false);
+    }
+  }, [database, date]);
+
+  useEffect(() => {
+    const loadTask = setTimeout(() => {
+      void refresh();
+    }, 0);
+
+    return () => clearTimeout(loadTask);
+  }, [refresh]);
+
+  const save = useCallback(async (habitType: HabitType, value: HabitValue) => {
+    await saveHabitValue(database, habitType, value, date);
+    await refresh();
+  }, [database, date, refresh]);
+
+  return { record, loading, error, save, refresh };
+}
