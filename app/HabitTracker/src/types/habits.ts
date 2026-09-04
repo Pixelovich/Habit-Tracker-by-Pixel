@@ -56,3 +56,32 @@ export interface DailyData {
   score: DailyScore;
   indicators: HabitIndicator[];
 }
+
+export type StatisticsPeriod = 7 | 30 | 90;
+
+export interface DailyScorePoint {
+  date: string;
+  score: number | null;
+}
+
+export interface IndicatorStatistics {
+  id: HabitType;
+  name: string;
+  icon: string;
+  primaryMetric: string;
+  secondaryMetric: string | null;
+  trend: number | null;
+  recordsCount: number;
+}
+
+export interface StatisticsData {
+  averageScore: number;
+  bestDay: { date: string; score: number } | null;
+  worstDay: { date: string; score: number } | null;
+  daysWithRecords: number;
+  completeDays: number;
+  averageCoverage: number;
+  currentStreak: number;
+  scoreEvolution: DailyScorePoint[];
+  indicators: IndicatorStatistics[];
+}

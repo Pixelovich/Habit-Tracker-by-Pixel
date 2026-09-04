@@ -57,6 +57,18 @@ export async function getDailyRecords(database: SQLiteDatabase): Promise<DailyRe
   );
 }
 
+export async function getDailyRecordsInRange(
+  database: SQLiteDatabase,
+  startDate: string,
+  endDate: string,
+): Promise<DailyRecord[]> {
+  return database.getAllAsync<DailyRecord>(
+    'SELECT * FROM daily_records WHERE date BETWEEN ? AND ? ORDER BY date ASC',
+    startDate,
+    endDate,
+  );
+}
+
 export async function saveHabitValue(
   database: SQLiteDatabase,
   habitType: HabitType,

@@ -31,6 +31,20 @@ function isNumber(value: number | null | undefined): value is number {
   return value != null && Number.isFinite(value);
 }
 
+function getDateKey(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function getPreviousDateKey(dateKey: string): string {
+  const [year, month, day] = dateKey.split('-').map(Number);
+  const date = new Date(year, month - 1, day);
+  date.setDate(date.getDate() - 1);
+  return getDateKey(date);
+}
+
 export function scoreTobacco(value: number): number {
   if (value <= 0) return 100;
   if (value === 1) return 70;
@@ -89,6 +103,23 @@ export function calculateDailyScore(record: DailyRecord | null): ScoreResult {
   const totalWeight = scores.reduce((sum, [weight]) => sum + weight, 0);
   const weightedScore = scores.reduce((sum, [weight, score]) => sum + weight * score, 0);
   return createResult(scores.length, totalWeight === 0 ? 0 : weightedScore / totalWeight);
+}
+
+export function calculateStreak(records: DailyRecord[]): number {
+  const recordsByDate = new Map(records.map((record) => [record.date, record]));
+  const dates = [...recordsByDate.keys()].sort().reverse();
+  if (dates.length === 0) return 0;
+
+  let streak = 0;
+  let dateKey = dates[0];
+  while (true) {
+    const record = recordsByDate.get(dateKey);
+    const score = calculateDailyScore(record ?? null);
+    if (!record || score.registeredCount !== score.totalIndicators || score.score < 80) break;
+    streak += 1;
+    dateKey = getPreviousDateKey(dateKey);
+  }
+  return streak;
 }
 
 function createResult(registeredCount: number, rawScore: number): ScoreResult {
