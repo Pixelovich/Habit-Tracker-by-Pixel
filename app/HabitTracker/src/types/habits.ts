@@ -57,6 +57,16 @@ export interface DailyData {
   indicators: HabitIndicator[];
 }
 
+export interface HabitGoal {
+  habitType: HabitType;
+  targetValue: number | null;
+  minimumValue: number | null;
+  maximumValue: number | null;
+  uninterrupted: boolean | null;
+}
+
+export type HabitGoals = Record<HabitType, HabitGoal>;
+
 export type StatisticsPeriod = 7 | 30 | 90;
 
 export interface DailyScorePoint {
