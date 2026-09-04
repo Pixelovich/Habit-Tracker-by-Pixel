@@ -12,8 +12,7 @@ import { RegisterForm } from '@/components/today/register-form';
 import { getIndicators } from '@/components/today/indicator-data';
 import { BottomTabInset, Spacing } from '@/constants/theme';
 import { useDailyHabits } from '@/hooks/use-daily-habits';
-import { calculateDailyScore } from '@/services/scoring';
-import type { DailyScore, HabitType } from '@/types/habits';
+import type { HabitType } from '@/types/habits';
 
 // Datos de perfil
 const PROFILE = {
@@ -26,7 +25,7 @@ export default function TodayScreen() {
   const [menuVisible, setMenuVisible] = useState(false);
   const [formVisible, setFormVisible] = useState(false);
   const [selectedHabit, setSelectedHabit] = useState<HabitType | null>(null);
-  const { record, save } = useDailyHabits();
+  const { record, score, save } = useDailyHabits();
 
   const handleRegisterPress = useCallback(() => {
     setMenuVisible(true);
@@ -38,8 +37,6 @@ export default function TodayScreen() {
   }, []);
 
   const indicators = getIndicators(record);
-  const score: DailyScore = calculateDailyScore(record);
-
   return (
     <ThemedView style={styles.container}>
       <SafeAreaView style={styles.safeArea} edges={['top']}>

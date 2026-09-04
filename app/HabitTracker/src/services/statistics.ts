@@ -3,6 +3,7 @@ import { calculateDailyScore, calculateStreak } from '@/services/scoring';
 import type {
   DailyRecord,
   DailyScorePoint,
+  HabitGoals,
   HabitType,
   IndicatorStatistics,
   StatisticsData,
@@ -64,7 +65,7 @@ export function getStatisticsDateRange(period: 7 | 30 | 90, endDate = new Date()
   return { startDate: getDateKey(start), endDate: getDateKey(endDate) };
 }
 
-export function calculateScoreEvolution(records: DailyRecord[], startDate: string, endDate: string): DailyScorePoint[] {
+export function calculateScoreEvolution(records: DailyRecord[], startDate: string, endDate: string, goals?: HabitGoals): DailyScorePoint[] {
   const recordsByDate = new Map(records.map((record) => [record.date, record]));
   const points: DailyScorePoint[] = [];
   const current = new Date(`${startDate}T00:00:00`);
@@ -72,7 +73,7 @@ export function calculateScoreEvolution(records: DailyRecord[], startDate: strin
   while (current <= end) {
     const date = getDateKey(current);
     const record = recordsByDate.get(date);
-    points.push({ date, score: record ? calculateDailyScore(record).score : null });
+    points.push({ date, score: record ? calculateDailyScore(record, goals).score : null });
     current.setDate(current.getDate() + 1);
   }
   return points;
@@ -120,8 +121,8 @@ function calculateIndicatorStatistics(records: DailyRecord[]): IndicatorStatisti
   });
 }
 
-export function calculateStatistics(records: DailyRecord[], startDate: string, endDate: string): StatisticsData {
-  const dailyScores = records.map((record) => ({ record, score: calculateDailyScore(record) }));
+export function calculateStatistics(records: DailyRecord[], startDate: string, endDate: string, goals?: HabitGoals): StatisticsData {
+  const dailyScores = records.map((record) => ({ record, score: calculateDailyScore(record, goals) }));
   const scoredDays = dailyScores.filter(({ score }) => score.registeredCount > 0);
   const orderedScores = [...scoredDays].sort((left, right) => right.score.score - left.score.score);
   const best = orderedScores[0];
@@ -134,8 +135,8 @@ export function calculateStatistics(records: DailyRecord[], startDate: string, e
     daysWithRecords: scoredDays.length,
     completeDays: dailyScores.filter(({ score }) => score.registeredCount === score.totalIndicators).length,
     averageCoverage: round(average(scoredDays.map(({ score }) => score.coverage)), 0),
-    currentStreak: calculateStreak(records),
-    scoreEvolution: calculateScoreEvolution(records, startDate, endDate),
+    currentStreak: calculateStreak(records, goals),
+    scoreEvolution: calculateScoreEvolution(records, startDate, endDate, goals),
     indicators: calculateIndicatorStatistics(records),
   };
 }

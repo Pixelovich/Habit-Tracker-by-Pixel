@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useSQLiteContext } from 'expo-sqlite';
 
 import { getDailyRecordsInRange } from '@/database/habits';
+import { getGoals } from '@/database/settings';
 import { calculateStatistics, getStatisticsDateRange } from '@/services/statistics';
 import type { StatisticsData, StatisticsPeriod } from '@/types/habits';
 
@@ -17,8 +18,11 @@ export function useStatistics() {
     try {
       setLoading(true);
       setError(null);
-      const records = await getDailyRecordsInRange(database, range.startDate, range.endDate);
-      setData(calculateStatistics(records, range.startDate, range.endDate));
+      const [records, goals] = await Promise.all([
+        getDailyRecordsInRange(database, range.startDate, range.endDate),
+        getGoals(database),
+      ]);
+      setData(calculateStatistics(records, range.startDate, range.endDate, goals));
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError : new Error('No se pudieron cargar las estadísticas'));
     } finally {

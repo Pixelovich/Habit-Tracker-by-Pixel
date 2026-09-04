@@ -7,8 +7,9 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
 import { getDailyRecords } from '@/database/habits';
+import { getGoals } from '@/database/settings';
 import { calculateDailyScore } from '@/services/scoring';
-import type { DailyRecord } from '@/types/habits';
+import type { DailyRecord, HabitGoals } from '@/types/habits';
 
 function formatDate(dateKey: string): string {
   const [year, month, day] = dateKey.split('-').map(Number);
@@ -27,11 +28,17 @@ export default function HistoryScreen() {
   const database = useSQLiteContext();
   const router = useRouter();
   const [records, setRecords] = useState<DailyRecord[]>([]);
+  const [goals, setGoals] = useState<HabitGoals | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const task = setTimeout(() => {
-      void getDailyRecords(database).then(setRecords).finally(() => setLoading(false));
+      void Promise.all([getDailyRecords(database), getGoals(database)])
+        .then(([nextRecords, nextGoals]) => {
+          setRecords(nextRecords);
+          setGoals(nextGoals);
+        })
+        .finally(() => setLoading(false));
     }, 0);
     return () => clearTimeout(task);
   }, [database]);
@@ -44,7 +51,7 @@ export default function HistoryScreen() {
         {loading ? <ActivityIndicator /> : records.length === 0 ? (
           <ThemedText style={styles.empty}>Todavía no hay días registrados.</ThemedText>
         ) : records.map((record) => {
-          const score = calculateDailyScore(record);
+          const score = calculateDailyScore(record, goals ?? undefined);
           return (
             <Pressable key={record.date} onPress={() => router.push(`/history/${record.date}`)}>
               <ThemedView style={styles.card}>

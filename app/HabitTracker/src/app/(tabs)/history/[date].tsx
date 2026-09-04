@@ -9,7 +9,6 @@ import { ThemedView } from '@/components/themed-view';
 import { getIndicators } from '@/components/today/indicator-data';
 import { Spacing } from '@/constants/theme';
 import { useDailyHabits } from '@/hooks/use-daily-habits';
-import { calculateDailyScore } from '@/services/scoring';
 import type { HabitType } from '@/types/habits';
 
 function formatFullDate(dateKey: string): string {
@@ -23,11 +22,9 @@ export default function HistoryDetailScreen() {
   const { date } = useLocalSearchParams<{ date: string }>();
   const router = useRouter();
   const selectedDate = Array.isArray(date) ? date[0] : date;
-  const { record, save } = useDailyHabits(selectedDate);
+  const { record, score, save } = useDailyHabits(selectedDate);
   const [formVisible, setFormVisible] = useState(false);
   const [selectedHabit, setSelectedHabit] = useState<HabitType | null>(null);
-  const score = calculateDailyScore(record);
-
   return (
     <ThemedView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
