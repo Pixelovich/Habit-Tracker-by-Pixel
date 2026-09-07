@@ -13,7 +13,7 @@ export function ScoreCard({ score }: ScoreCardProps) {
     <ThemedView style={styles.container}>
       {/* Sección principal: Puntuación */}
       <View style={styles.scoreMainSection}>
-        <View>
+        <View style={styles.scoreContent}>
           <ThemedText style={styles.scoreLabel}>
             {score.registeredCount === 0
               ? 'Sin datos registrados'
@@ -92,13 +92,20 @@ const styles = StyleSheet.create({
   },
   scoreMainSection: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexWrap: 'wrap',
     alignItems: 'center',
+    gap: Spacing.three,
+  },
+  scoreContent: {
+    flexGrow: 1,
+    flexShrink: 1,
+    minWidth: 0,
   },
   scoreDisplay: {
     flexDirection: 'row',
     alignItems: 'baseline',
     gap: Spacing.one,
+    overflow: 'visible',
   },
   scoreLabel: {
     fontSize: 13,
@@ -108,6 +115,7 @@ const styles = StyleSheet.create({
   },
   scoreNumber: {
     fontSize: 56,
+    lineHeight: 64,
     fontWeight: '700',
   },
   scoreComplement: {
@@ -117,10 +125,12 @@ const styles = StyleSheet.create({
   },
   scoreSeparator: {
     fontSize: 32,
+    lineHeight: 38,
     fontWeight: '300',
   },
   scoreMaximum: {
     fontSize: 24,
+    lineHeight: 30,
     fontWeight: '500',
   },
   streakBadge: {

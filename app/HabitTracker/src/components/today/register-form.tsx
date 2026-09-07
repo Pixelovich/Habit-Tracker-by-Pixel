@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import {
+  KeyboardAvoidingView,
   Modal,
+  Platform,
   Pressable,
+  ScrollView,
   StyleSheet,
   Switch,
   TextInput,
@@ -101,8 +104,17 @@ export function RegisterForm({ visible, habitType, record, onCancel, onSave }: R
 
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onCancel}>
-      <View style={styles.overlay}>
-        <ThemedView style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.keyboardAvoidingView}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.overlay}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+        >
+          <ThemedView style={styles.container}>
           <View style={styles.header}>
             <View>
               <ThemedText style={styles.title}>Registrar {detail.name}</ThemedText>
@@ -149,15 +161,18 @@ export function RegisterForm({ visible, habitType, record, onCancel, onSave }: R
               <ThemedText style={styles.saveText}>{saving ? 'Guardando...' : 'Guardar'}</ThemedText>
             </TouchableOpacity>
           </View>
-        </ThemedView>
-      </View>
+          </ThemedView>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
-  overlay: { flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)', justifyContent: 'flex-end' },
-  container: { borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: Spacing.four },
+  keyboardAvoidingView: { flex: 1 },
+  scrollView: { flex: 1 },
+  overlay: { flexGrow: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)', justifyContent: 'flex-end' },
+  container: { width: '100%', borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: Spacing.four },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: Spacing.three },
   title: { fontSize: 20, fontWeight: '700' },
   unit: { fontSize: 13, opacity: 0.6 },
