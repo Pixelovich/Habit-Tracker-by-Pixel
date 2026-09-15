@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useSQLiteContext } from 'expo-sqlite';
-
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
@@ -25,7 +23,6 @@ function formatDate(dateKey: string): string {
 }
 
 export default function HistoryScreen() {
-  const database = useSQLiteContext();
   const router = useRouter();
   const [records, setRecords] = useState<DailyRecord[]>([]);
   const [goals, setGoals] = useState<HabitGoals | null>(null);
@@ -33,7 +30,7 @@ export default function HistoryScreen() {
 
   useEffect(() => {
     const task = setTimeout(() => {
-      void Promise.all([getDailyRecords(database), getGoals(database)])
+      void Promise.all([getDailyRecords(), getGoals()])
         .then(([nextRecords, nextGoals]) => {
           setRecords(nextRecords);
           setGoals(nextGoals);
@@ -41,7 +38,7 @@ export default function HistoryScreen() {
         .finally(() => setLoading(false));
     }, 0);
     return () => clearTimeout(task);
-  }, [database]);
+  }, []);
 
   return (
     <ThemedView style={styles.container}>

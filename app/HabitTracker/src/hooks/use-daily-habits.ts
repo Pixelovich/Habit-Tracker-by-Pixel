@@ -1,14 +1,22 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useSQLiteContext } from 'expo-sqlite';
 
-import { getDailyRecord, getLocalDateKey, saveHabitValue } from '@/database/habits';
+import {
+  getDailyRecord,
+  getLocalDateKey,
+  saveHabitValue,
+} from '@/database/habits';
 import { getGoals } from '@/database/settings';
 import { calculateDailyScore } from '@/services/scoring';
-import type { DailyRecord, HabitGoals, HabitType, HabitValue } from '@/types/habits';
+import type {
+  DailyRecord,
+  HabitGoals,
+  HabitType,
+  HabitValue,
+} from '@/types/habits';
 
 export function useDailyHabits(selectedDate?: string) {
-  const database = useSQLiteContext();
   const date = selectedDate ?? getLocalDateKey();
+
   const [record, setRecord] = useState<DailyRecord | null>(null);
   const [goals, setGoals] = useState<HabitGoals | null>(null);
   const [loading, setLoading] = useState(true);
@@ -16,16 +24,26 @@ export function useDailyHabits(selectedDate?: string) {
 
   const refresh = useCallback(async () => {
     try {
+      setLoading(true);
       setError(null);
-      const [nextRecord, nextGoals] = await Promise.all([getDailyRecord(database, date), getGoals(database)]);
+
+      const [nextRecord, nextGoals] = await Promise.all([
+        getDailyRecord(date),
+        getGoals(),
+      ]);
+
       setRecord(nextRecord);
       setGoals(nextGoals);
     } catch (loadError) {
-      setError(loadError instanceof Error ? loadError : new Error('No se pudieron cargar los datos'));
+      setError(
+        loadError instanceof Error
+          ? loadError
+          : new Error('No se pudieron cargar los datos'),
+      );
     } finally {
       setLoading(false);
     }
-  }, [database, date]);
+  }, [date]);
 
   useEffect(() => {
     const loadTask = setTimeout(() => {
@@ -35,10 +53,21 @@ export function useDailyHabits(selectedDate?: string) {
     return () => clearTimeout(loadTask);
   }, [refresh]);
 
-  const save = useCallback(async (habitType: HabitType, value: HabitValue) => {
-    await saveHabitValue(database, habitType, value, date);
-    await refresh();
-  }, [database, date, refresh]);
+  const save = useCallback(
+    async (habitType: HabitType, value: HabitValue) => {
+      await saveHabitValue(habitType, value, date);
+      await refresh();
+    },
+    [date, refresh],
+  );
 
-  return { record, goals, score: calculateDailyScore(record, goals ?? undefined), loading, error, save, refresh };
+  return {
+    record,
+    goals,
+    score: calculateDailyScore(record, goals ?? undefined),
+    loading,
+    error,
+    save,
+    refresh,
+  };
 }
