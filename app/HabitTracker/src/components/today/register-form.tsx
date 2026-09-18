@@ -129,11 +129,24 @@ export function RegisterForm({ visible, habitType, record, onCancel, onSave }: R
             <View style={styles.sleepRow}>
               <View style={styles.sleepInput}>
                 <ThemedText style={styles.label}>Horas</ThemedText>
-                <TextInput value={hours} onChangeText={setHours} keyboardType="number-pad" style={inputStyle} />
+                <TextInput
+  value={hours}
+  onChangeText={setHours}
+  keyboardType="number-pad"
+  style={inputStyle}
+  returnKeyType="next"
+/>
               </View>
               <View style={styles.sleepInput}>
                 <ThemedText style={styles.label}>Minutos</ThemedText>
-                <TextInput value={minutes} onChangeText={setMinutes} keyboardType="number-pad" style={inputStyle} />
+<TextInput
+  value={minutes}
+  onChangeText={setMinutes}
+  keyboardType="number-pad"
+  style={inputStyle}
+  returnKeyType="done"
+  onSubmitEditing={() => void handleSave()}
+/>
               </View>
               <View style={styles.switchRow}>
                 <ThemedText style={styles.label}>Ininterrumpido</ThemedText>
@@ -141,15 +154,17 @@ export function RegisterForm({ visible, habitType, record, onCancel, onSave }: R
               </View>
             </View>
           ) : (
-            <TextInput
-              value={value}
-              onChangeText={setValue}
-              keyboardType={habitType === 'weight' || habitType === 'alcohol' ? 'decimal-pad' : 'number-pad'}
-              placeholder="Valor"
-              placeholderTextColor={theme.textSecondary}
-              style={inputStyle}
-              autoFocus
-            />
+<TextInput
+  value={value}
+  onChangeText={setValue}
+  keyboardType={habitType === 'weight' || habitType === 'alcohol' ? 'decimal-pad' : 'number-pad'}
+  placeholder="Valor"
+  placeholderTextColor={theme.textSecondary}
+  style={inputStyle}
+  autoFocus
+  returnKeyType="done"
+  onSubmitEditing={() => void handleSave()}
+/>
           )}
 
           {validationError ? <ThemedText style={styles.error}>{validationError}</ThemedText> : null}

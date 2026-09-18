@@ -1,29 +1,33 @@
-import 'react-native-url-polyfill/auto'
-import 'expo-sqlite/localStorage/install'
+import 'react-native-url-polyfill/auto';
+import { createClient } from '@supabase/supabase-js';
+import 'expo-sqlite/localStorage/install';
 
-import { createClient } from '@supabase/supabase-js'
-
-const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL
+const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL!;
 const supabasePublishableKey =
-  process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+  process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
 
-if (!supabaseUrl) {
-  throw new Error('Missing EXPO_PUBLIC_SUPABASE_URL')
-}
+// During static rendering there is no browser localStorage.
+// Use a no-op storage adapter so the app can be rendered safely.
+const ssrStorage = {
+  getItem: async (_key: string) => null,
+  setItem: async (_key: string, _value: string) => {},
+  removeItem: async (_key: string) => {},
+};
 
-if (!supabasePublishableKey) {
-  throw new Error('Missing EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY')
-}
+const storage =
+  typeof localStorage !== 'undefined'
+    ? localStorage
+    : ssrStorage;
 
 export const supabase = createClient(
   supabaseUrl,
   supabasePublishableKey,
   {
     auth: {
-      storage: localStorage,
+      storage,
       autoRefreshToken: true,
       persistSession: true,
       detectSessionInUrl: false,
     },
   },
-)
+);
