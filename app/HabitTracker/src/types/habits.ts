@@ -63,6 +63,7 @@ export interface HabitGoal {
   minimumValue: number | null;
   maximumValue: number | null;
   uninterrupted: boolean | null;
+  enabled: boolean;
 }
 
 export type HabitGoals = Record<HabitType, HabitGoal>;

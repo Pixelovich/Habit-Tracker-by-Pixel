@@ -19,6 +19,7 @@ export const DEFAULT_HABIT_GOALS: HabitGoals = {
     minimumValue: null,
     maximumValue: null,
     uninterrupted: null,
+    enabled: true, 
   },
   alcohol: {
     habitType: 'alcohol',
@@ -26,6 +27,7 @@ export const DEFAULT_HABIT_GOALS: HabitGoals = {
     minimumValue: null,
     maximumValue: null,
     uninterrupted: null,
+    enabled: true, 
   },
   exercise: {
     habitType: 'exercise',
@@ -33,6 +35,7 @@ export const DEFAULT_HABIT_GOALS: HabitGoals = {
     minimumValue: 45,
     maximumValue: 75,
     uninterrupted: null,
+    enabled: true,
   },
   diet: {
     habitType: 'diet',
@@ -40,6 +43,7 @@ export const DEFAULT_HABIT_GOALS: HabitGoals = {
     minimumValue: null,
     maximumValue: null,
     uninterrupted: null,
+    enabled: true, 
   },
   sleep: {
     habitType: 'sleep',
@@ -47,6 +51,7 @@ export const DEFAULT_HABIT_GOALS: HabitGoals = {
     minimumValue: null,
     maximumValue: null,
     uninterrupted: true,
+    enabled: true, 
   },
   anxiety: {
     habitType: 'anxiety',
@@ -54,6 +59,7 @@ export const DEFAULT_HABIT_GOALS: HabitGoals = {
     minimumValue: null,
     maximumValue: null,
     uninterrupted: null,
+    enabled: true, 
   },
   weight: {
     habitType: 'weight',
@@ -61,6 +67,7 @@ export const DEFAULT_HABIT_GOALS: HabitGoals = {
     minimumValue: null,
     maximumValue: null,
     uninterrupted: null,
+    enabled: true,
   },
   motivation: {
     habitType: 'motivation',
@@ -68,6 +75,7 @@ export const DEFAULT_HABIT_GOALS: HabitGoals = {
     minimumValue: null,
     maximumValue: null,
     uninterrupted: null,
+    enabled: true, 
   },
 };
 
@@ -77,6 +85,7 @@ interface HabitGoalRow {
   minimum_value: number | null;
   maximum_value: number | null;
   uninterrupted: boolean | null;
+  enabled: boolean | null;
 }
 
 function toHabitGoal(row: HabitGoalRow): HabitGoal {
@@ -86,6 +95,7 @@ function toHabitGoal(row: HabitGoalRow): HabitGoal {
     minimumValue: row.minimum_value,
     maximumValue: row.maximum_value,
     uninterrupted: row.uninterrupted,
+    enabled: row.enabled ?? true,
   };
 }
 
@@ -112,7 +122,7 @@ export async function getGoals(): Promise<HabitGoals> {
   const { data, error } = await supabase
     .from('habit_goals')
     .select(
-      'habit_type, target_value, minimum_value, maximum_value, uninterrupted',
+      'habit_type, target_value, minimum_value, maximum_value, uninterrupted, enabled',
     )
     .eq('user_id', userId);
 
@@ -137,7 +147,7 @@ export async function getGoal(
   const { data, error } = await supabase
     .from('habit_goals')
     .select(
-      'habit_type, target_value, minimum_value, maximum_value, uninterrupted',
+      'habit_type, target_value, minimum_value, maximum_value, uninterrupted, enabled',
     )
     .eq('user_id', userId)
     .eq('habit_type', habitType)
@@ -163,6 +173,7 @@ export async function saveGoal(goal: HabitGoal): Promise<void> {
         minimum_value: goal.minimumValue,
         maximum_value: goal.maximumValue,
         uninterrupted: goal.uninterrupted,
+        enabled: goal.enabled,
       },
       {
         onConflict: 'user_id,habit_type',

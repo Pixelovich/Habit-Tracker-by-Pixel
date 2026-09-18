@@ -88,12 +88,22 @@ export default function SettingsScreen() {
                   return (
                     <ThemedView key={indicator.id} style={styles.card}>
                       <View style={styles.cardHeader}>
-                        <ThemedText style={styles.icon}>{indicator.icon}</ThemedText>
-                        <View style={styles.cardTitle}>
-                          <ThemedText style={styles.name}>{indicator.name}</ThemedText>
-                          <ThemedText style={styles.current}>Objetivo: {formatGoal(goal)}</ThemedText>
-                        </View>
-                      </View>
+  <ThemedText style={styles.icon}>{indicator.icon}</ThemedText>
+
+  <View style={styles.cardTitle}>
+    <ThemedText style={styles.name}>{indicator.name}</ThemedText>
+    <ThemedText style={styles.current}>
+      Objetivo: {formatGoal(goal)}
+    </ThemedText>
+  </View>
+
+  <Switch
+    value={goal.enabled}
+    onValueChange={(value) =>
+      updateGoal(indicator.id, { enabled: value })
+    }
+  />
+</View>
 
                       {indicator.id === 'exercise' ? (
                         <View style={styles.fieldsRow}>
