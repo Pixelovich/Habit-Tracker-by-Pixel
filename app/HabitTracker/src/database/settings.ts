@@ -1,16 +1,6 @@
 import { supabase } from '@/services/supabase';
 import type { HabitGoal, HabitGoals, HabitType } from '@/types/habits';
 
-const HABIT_TYPES: HabitType[] = [
-  'tobacco',
-  'alcohol',
-  'exercise',
-  'diet',
-  'sleep',
-  'anxiety',
-  'weight',
-  'motivation',
-];
 
 export const DEFAULT_HABIT_GOALS: HabitGoals = {
   tobacco: {
@@ -76,6 +66,113 @@ export const DEFAULT_HABIT_GOALS: HabitGoals = {
     maximumValue: null,
     uninterrupted: null,
     enabled: true, 
+  },
+    hydration: {
+    habitType: 'hydration',
+    targetValue: null,
+    minimumValue: null,
+    maximumValue: null,
+    uninterrupted: null,
+    enabled: false,
+  },
+
+  meditation: {
+    habitType: 'meditation',
+    targetValue: null,
+    minimumValue: null,
+    maximumValue: null,
+    uninterrupted: null,
+    enabled: false,
+  },
+
+  reading: {
+    habitType: 'reading',
+    targetValue: null,
+    minimumValue: null,
+    maximumValue: null,
+    uninterrupted: null,
+    enabled: false,
+  },
+
+  nap: {
+    habitType: 'nap',
+    targetValue: null,
+    minimumValue: null,
+    maximumValue: null,
+    uninterrupted: null,
+    enabled: false,
+  },
+
+  sun_exposure: {
+    habitType: 'sun_exposure',
+    targetValue: null,
+    minimumValue: null,
+    maximumValue: null,
+    uninterrupted: null,
+    enabled: false,
+  },
+
+  steps: {
+    habitType: 'steps',
+    targetValue: null,
+    minimumValue: null,
+    maximumValue: null,
+    uninterrupted: null,
+    enabled: false,
+  },
+
+  housework: {
+    habitType: 'housework',
+    targetValue: null,
+    minimumValue: null,
+    maximumValue: null,
+    uninterrupted: null,
+    enabled: false,
+  },
+
+  screen_time: {
+    habitType: 'screen_time',
+    targetValue: null,
+    minimumValue: null,
+    maximumValue: null,
+    uninterrupted: null,
+    enabled: false,
+  },
+
+  phone_time: {
+    habitType: 'phone_time',
+    targetValue: null,
+    minimumValue: null,
+    maximumValue: null,
+    uninterrupted: null,
+    enabled: false,
+  },
+
+  concentration: {
+    habitType: 'concentration',
+    targetValue: null,
+    minimumValue: null,
+    maximumValue: null,
+    uninterrupted: null,
+    enabled: false,
+  },
+
+  sex: {
+    habitType: 'sex',
+    targetValue: 1,
+    minimumValue: null,
+    maximumValue: null,
+    uninterrupted: null,
+    enabled: false,
+  },
+
+  expenses: {
+    habitType: 'expenses',
+    targetValue: 1,
+    minimumValue: null,
+    maximumValue: null,
+    uninterrupted: null,
+    enabled: false,
   },
 };
 

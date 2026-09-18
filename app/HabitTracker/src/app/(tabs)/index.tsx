@@ -25,7 +25,8 @@ export default function TodayScreen() {
   const [menuVisible, setMenuVisible] = useState(false);
   const [formVisible, setFormVisible] = useState(false);
   const [selectedHabit, setSelectedHabit] = useState<HabitType | null>(null);
-  const { record, score, save } = useDailyHabits();
+  const { record, goals, score, save } = useDailyHabits();
+  console.log('GOALS:', goals);
 
   const handleRegisterPress = useCallback(() => {
     setMenuVisible(true);
@@ -36,7 +37,9 @@ export default function TodayScreen() {
     setFormVisible(true);
   }, []);
 
-  const indicators = getIndicators(record);
+  const indicators = getIndicators(record).filter(
+  (indicator) => goals?.[indicator.id]?.enabled !== false
+);
   return (
     <ThemedView style={styles.container}>
       <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -93,11 +96,12 @@ export default function TodayScreen() {
       </SafeAreaView>
 
       {/* Menú de registro */}
-      <RegisterMenu
-        visible={menuVisible}
-        onClose={() => setMenuVisible(false)}
-        onSelect={handleMenuSelect}
-      />
+<RegisterMenu
+  visible={menuVisible}
+  onClose={() => setMenuVisible(false)}
+  onSelect={handleMenuSelect}
+  goals={goals}
+/>
       <RegisterForm
         visible={formVisible}
         habitType={selectedHabit}

@@ -2,7 +2,27 @@
  * Tipos de datos para los hábitos y su seguimiento
  */
 
-export type HabitType = 'tobacco' | 'alcohol' | 'exercise' | 'diet' | 'sleep' | 'anxiety' | 'weight' | 'motivation';
+export type HabitType =
+  | 'tobacco'
+  | 'alcohol'
+  | 'exercise'
+  | 'diet'
+  | 'sleep'
+  | 'anxiety'
+  | 'weight'
+  | 'motivation'
+  | 'hydration'
+  | 'meditation'
+  | 'reading'
+  | 'nap'
+  | 'sun_exposure'
+  | 'steps'
+  | 'housework'
+  | 'screen_time'
+  | 'phone_time'
+  | 'concentration'
+  | 'sex'
+  | 'expenses';
 
 export interface HabitIndicator {
   id: HabitType;
@@ -25,6 +45,18 @@ export interface DailyRecord {
   anxiety_score: number | null;
   weight_kg: number | null;
   motivation_score: number | null;
+  hydration_liters: number | null;
+  meditation_minutes: number | null;
+  reading_minutes: number | null;
+  nap_minutes: number | null;
+  sun_exposure_minutes: number | null;
+  steps_count: number | null;
+  housework_minutes: number | null;
+  screen_time_minutes: number | null;
+  phone_time_minutes: number | null;
+  concentration_score: number | null;
+  sex: number | null;
+  expense_control: number | null;
   created_at: string;
   updated_at: string;
 }

@@ -35,6 +35,18 @@ const DETAILS: Record<HabitType, { name: string; unit: string }> = {
   anxiety: { name: 'Ansiedad', unit: '0-10' },
   weight: { name: 'Peso', unit: 'kg' },
   motivation: { name: 'Motivación', unit: '0-10' },
+  hydration: { name: 'Hidratación', unit: 'litros' },
+  meditation: { name: 'Meditación', unit: 'minutos' },
+  reading: { name: 'Lectura', unit: 'minutos' },
+  nap: { name: 'Descanso / siesta', unit: 'minutos' },
+  sun_exposure: { name: 'Exposición al sol', unit: 'minutos' },
+  steps: { name: 'Pasos diarios', unit: 'pasos' },
+  housework: { name: 'Orden / tareas domésticas', unit: 'minutos' },
+  screen_time: { name: 'Tiempo de pantalla', unit: 'minutos' },
+  phone_time: { name: 'Tiempo de móvil', unit: 'minutos' },
+  concentration: { name: 'Concentración', unit: 'nivel' },
+  sex: { name: 'Sexo', unit: '' },
+  expenses: { name: 'Control de gastos', unit: '' },
 };
 
 export function RegisterForm({ visible, habitType, record, onCancel, onSave }: RegisterFormProps) {
@@ -54,8 +66,33 @@ export function RegisterForm({ visible, habitType, record, onCancel, onSave }: R
         setMinutes(record?.sleep_minutes?.toString() ?? '');
         setUninterrupted(record?.sleep_uninterrupted === 1);
       } else {
-        const existing = record?.[`${habitType === 'tobacco' ? 'tobacco_cigarettes' : habitType === 'alcohol' ? 'alcohol_units' : habitType === 'exercise' ? 'exercise_minutes' : habitType === 'diet' ? 'diet_score' : habitType === 'anxiety' ? 'anxiety_score' : habitType === 'weight' ? 'weight_kg' : 'motivation_score'}` as keyof DailyRecord];
-        setValue(existing == null ? '' : String(existing));
+ const fieldMap: Partial<Record<HabitType, keyof DailyRecord>> = {
+  tobacco: 'tobacco_cigarettes',
+  alcohol: 'alcohol_units',
+  exercise: 'exercise_minutes',
+  diet: 'diet_score',
+  anxiety: 'anxiety_score',
+  weight: 'weight_kg',
+  motivation: 'motivation_score',
+  hydration: 'hydration_liters',
+  meditation: 'meditation_minutes',
+  reading: 'reading_minutes',
+  nap: 'nap_minutes',
+  sun_exposure: 'sun_exposure_minutes',
+  steps: 'steps_count',
+  housework: 'housework_minutes',
+  screen_time: 'screen_time_minutes',
+  phone_time: 'phone_time_minutes',
+  concentration: 'concentration_score',
+  sex: 'sex',
+  expenses: 'expense_control',
+};
+
+const existing = fieldMap[habitType]
+  ? record?.[fieldMap[habitType]!]
+  : null;
+
+setValue(existing == null ? '' : String(existing));
       }
       setValidationError('');
     }, 0);

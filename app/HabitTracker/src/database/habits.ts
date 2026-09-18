@@ -11,6 +11,18 @@ const HABIT_COLUMNS: Record<HabitType, string[]> = {
   anxiety: ['anxiety'],
   weight: ['weight'],
   motivation: ['motivation'],
+  hydration: ['hydration'],
+  meditation: ['meditation'],
+  reading: ['reading'],
+  nap: ['nap'],
+  sun_exposure: ['sun_exposure'],
+  steps: ['steps'],
+  housework: ['housework'],
+  screen_time: ['screen_time'],
+  phone_time: ['phone_time'],
+  concentration: ['concentration'],
+  sex: ['sex'],
+  expenses: ['expenses'],
 };
 
 const DAILY_RECORD_COLUMNS = `
@@ -25,6 +37,18 @@ const DAILY_RECORD_COLUMNS = `
   anxiety,
   weight,
   motivation,
+  hydration,
+  meditation,
+  reading,
+  nap,
+  sun_exposure,
+  steps,
+  housework,
+  screen_time,
+  phone_time,
+  concentration,
+  sex,
+  expenses,
   created_at,
   updated_at
 `;
@@ -41,6 +65,18 @@ function toDailyRecord(row: {
   anxiety: number | null;
   weight: number | null;
   motivation: number | null;
+    hydration: number | null;
+  meditation: number | null;
+  reading: number | null;
+  nap: number | null;
+  sun_exposure: number | null;
+  steps: number | null;
+  housework: number | null;
+  screen_time: number | null;
+  phone_time: number | null;
+  concentration: number | null;
+  sex: number | null;
+  expenses: number | null;
   created_at: string;
   updated_at: string;
 }): DailyRecord {
@@ -61,6 +97,18 @@ function toDailyRecord(row: {
     anxiety_score: row.anxiety,
     weight_kg: row.weight,
     motivation_score: row.motivation,
+        hydration_liters: row.hydration,
+    meditation_minutes: row.meditation,
+    reading_minutes: row.reading,
+    nap_minutes: row.nap,
+    sun_exposure_minutes: row.sun_exposure,
+    steps_count: row.steps,
+    housework_minutes: row.housework,
+    screen_time_minutes: row.screen_time,
+    phone_time_minutes: row.phone_time,
+    concentration_score: row.concentration,
+    sex: row.sex,
+    expense_control: row.expenses,
     created_at: row.created_at,
     updated_at: row.updated_at,
   };

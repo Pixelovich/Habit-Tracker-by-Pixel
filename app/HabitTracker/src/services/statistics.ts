@@ -31,14 +31,69 @@ function getSleepHours(record: DailyRecord): NumericValue {
 
 function getIndicatorValue(record: DailyRecord, id: HabitType): NumericValue {
   switch (id) {
-    case 'tobacco': return record.tobacco_cigarettes;
-    case 'alcohol': return record.alcohol_units;
-    case 'exercise': return record.exercise_minutes;
-    case 'diet': return record.diet_score;
-    case 'sleep': return getSleepHours(record);
-    case 'anxiety': return record.anxiety_score;
-    case 'weight': return record.weight_kg;
-    case 'motivation': return record.motivation_score;
+    case 'tobacco':
+      return record.tobacco_cigarettes;
+
+    case 'alcohol':
+      return record.alcohol_units;
+
+    case 'exercise':
+      return record.exercise_minutes;
+
+    case 'diet':
+      return record.diet_score;
+
+    case 'sleep':
+      return getSleepHours(record);
+
+    case 'anxiety':
+      return record.anxiety_score;
+
+    case 'weight':
+      return record.weight_kg;
+
+    case 'motivation':
+      return record.motivation_score;
+
+    case 'hydration':
+      return record.hydration_liters;
+
+    case 'meditation':
+      return record.meditation_minutes;
+
+    case 'reading':
+      return record.reading_minutes;
+
+    case 'nap':
+      return record.nap_minutes;
+
+    case 'sun_exposure':
+      return record.sun_exposure_minutes;
+
+    case 'steps':
+      return record.steps_count;
+
+    case 'housework':
+      return record.housework_minutes;
+
+    case 'screen_time':
+      return record.screen_time_minutes;
+
+    case 'phone_time':
+      return record.phone_time_minutes;
+
+    case 'concentration':
+      return record.concentration_score;
+
+    case 'sex':
+      return record.sex == null ? null : record.sex ? 1 : 0;
+
+    case 'expenses':
+      return record.expense_control == null
+        ? null
+        : record.expense_control
+          ? 1
+          : 0;
   }
 }
 

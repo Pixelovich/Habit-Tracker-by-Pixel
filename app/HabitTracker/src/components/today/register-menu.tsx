@@ -2,12 +2,13 @@ import { StyleSheet, View, Modal, TouchableOpacity, FlatList } from 'react-nativ
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
-import type { HabitType } from '@/types/habits';
+import type { HabitGoals, HabitType } from '@/types/habits';
 
 interface RegisterMenuProps {
   visible: boolean;
   onClose: () => void;
   onSelect?: (habitType: HabitType) => void;
+  goals: HabitGoals | null;
 }
 
 const HABIT_OPTIONS: { id: HabitType; name: string; icon: string }[] = [
@@ -21,11 +22,16 @@ const HABIT_OPTIONS: { id: HabitType; name: string; icon: string }[] = [
   { id: 'motivation', name: 'Motivación', icon: '🔥' },
 ];
 
-export function RegisterMenu({ visible, onClose, onSelect }: RegisterMenuProps) {
+export function RegisterMenu({ visible, onClose, onSelect, goals }: RegisterMenuProps) {
+  const enabledOptions = HABIT_OPTIONS.filter(
+    (option) => goals?.[option.id]?.enabled !== false
+  );  
+  
   const handleSelect = (habitType: HabitType) => {
     onSelect?.(habitType);
     onClose();
   };
+
 
   return (
     <Modal
@@ -48,7 +54,7 @@ export function RegisterMenu({ visible, onClose, onSelect }: RegisterMenuProps) 
           </View>
 
           <FlatList
-            data={HABIT_OPTIONS}
+            data={enabledOptions}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <TouchableOpacity

@@ -11,17 +11,72 @@ import type { HabitGoal, HabitType } from '@/types/habits';
 
 function formatGoal(goal: HabitGoal): string {
   switch (goal.habitType) {
-    case 'tobacco': return `${goal.targetValue ?? 0} cigarrillos`;
-    case 'alcohol': return `${goal.targetValue ?? 0} unidades`;
-    case 'exercise': return `${goal.minimumValue ?? 0}-${goal.maximumValue ?? 0} min`;
-    case 'diet': return `${goal.targetValue ?? 0}/10`;
+    case 'tobacco':
+      return `${goal.targetValue ?? 0} cigarrillos`;
+
+    case 'alcohol':
+      return `${goal.targetValue ?? 0} unidades`;
+
+    case 'exercise':
+      return `${goal.minimumValue ?? 0}-${goal.maximumValue ?? 0} min`;
+
+    case 'diet':
+      return `${goal.targetValue ?? 0}/10`;
+
     case 'sleep': {
       const totalMinutes = goal.targetValue ?? 0;
-      return `${Math.floor(totalMinutes / 60)} h ${totalMinutes % 60} min${goal.uninterrupted ? ' ininterrumpidas' : ''}`;
+      return `${Math.floor(totalMinutes / 60)} h ${totalMinutes % 60} min${
+        goal.uninterrupted ? ' · ininterrumpido' : ''
+      }`;
     }
-    case 'anxiety': return `${goal.targetValue ?? 0}/10`;
-    case 'weight': return `${goal.targetValue ?? 0} kg`;
-    case 'motivation': return `${goal.targetValue ?? 0}/10`;
+
+    case 'anxiety':
+      return `${goal.targetValue ?? 0}/10`;
+
+    case 'weight':
+      return `${goal.targetValue ?? 0} kg`;
+
+    case 'motivation':
+      return `${goal.targetValue ?? 0}/10`;
+
+    case 'hydration':
+      return `${goal.targetValue ?? 0} L`;
+
+    case 'meditation':
+      return `${goal.targetValue ?? 0} min`;
+
+    case 'reading':
+      return `${goal.targetValue ?? 0} min`;
+
+    case 'nap':
+      return `${goal.targetValue ?? 0} min`;
+
+    case 'sun_exposure':
+      return `${goal.targetValue ?? 0} min`;
+
+    case 'steps':
+      return `${goal.targetValue ?? 0} pasos`;
+
+    case 'housework':
+      return `${goal.targetValue ?? 0} min`;
+
+    case 'screen_time':
+      return `${goal.targetValue ?? 0} min`;
+
+    case 'phone_time':
+      return `${goal.targetValue ?? 0} min`;
+
+    case 'concentration':
+      return `${goal.targetValue ?? 0}/10`;
+
+    case 'sex':
+      return `${goal.targetValue ?? 0}`;
+
+    case 'expenses':
+      return `${goal.targetValue ?? 0}`;
+
+    default:
+      return 'Sin objetivo';
   }
 }
 
@@ -138,12 +193,23 @@ export default function SettingsScreen() {
                           </View>
                         </>
                       ) : (
-                        <GoalInput
-                          label="Valor objetivo"
-                          value={goal.targetValue}
-                          keyboardType={indicator.id === 'weight' ? 'decimal-pad' : 'number-pad'}
-                          onChangeText={(value) => updateGoal(indicator.id as HabitType, { targetValue: toNumber(value) })}
-                        />
+<GoalInput
+  label="Valor objetivo"
+  value={goal.targetValue}
+  keyboardType={indicator.id === 'weight' ? 'decimal-pad' : 'number-pad'}
+  onChangeText={(value) => {
+    const numericValue = toNumber(value);
+
+    if (indicator.id === 'sex' || indicator.id === 'expenses') {
+      if (numericValue === 0 || numericValue === 1 || numericValue === null) {
+        updateGoal(indicator.id, { targetValue: numericValue });
+      }
+      return;
+    }
+
+    updateGoal(indicator.id, { targetValue: numericValue });
+  }}
+/>
                       )}
                     </ThemedView>
                   );
