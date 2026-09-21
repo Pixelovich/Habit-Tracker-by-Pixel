@@ -65,6 +65,7 @@ export function useGoals() {
 
       await refresh();
     } catch (saveError) {
+      console.error('ERROR GUARDANDO OBJETIVOS:', saveError);
       const nextError =
         saveError instanceof Error
           ? saveError

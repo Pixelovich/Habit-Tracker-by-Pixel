@@ -266,10 +266,10 @@ export async function saveGoal(goal: HabitGoal): Promise<void> {
       {
         user_id: userId,
         habit_type: goal.habitType,
-        target_value: goal.targetValue,
+        target_value: goal.targetValue ?? 0,
         minimum_value: goal.minimumValue,
         maximum_value: goal.maximumValue,
-        uninterrupted: goal.uninterrupted,
+        uninterrupted: goal.uninterrupted ?? false,
         enabled: goal.enabled,
       },
       {
